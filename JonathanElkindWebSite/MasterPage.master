@@ -8,10 +8,21 @@
     <asp:ContentPlaceHolder id="head" runat="server" />
 </head>
 <body>
-    <form id="form1" runat="server">
-    <div>
-        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server" />
-    </div>
-    </form>
+    <table width ="90%" border =" 1" height="600px">
+        <tr> 
+            <td colspan ="2" align="center" height="40px"> 
+                <h1>Welcome to Jonathan Elkind's Website!</h1>
+            </td>
+        </tr>
+        <tr>
+            <td width="80%"> </td>
+            <td>
+              ניווט   <br />
+                <a href="Home Page.aspx">דף הבית</a><br />
+                </td>
+        </tr>
+         </table>
+     
+       
 </body>
 </html>

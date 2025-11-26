@@ -2,8 +2,4 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-        <h1>Welcome to Jonathan Elkind's Website!</h1>
-    <p>Here you can see all the things that I did</p>
-</asp:Content>
 
