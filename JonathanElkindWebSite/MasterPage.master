@@ -1,25 +1,61 @@
 ﻿<%@ Master Language="C#" %>
 
 <!DOCTYPE html>
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+</script>
+
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <meta charset="utf-8" />    
     <title></title>
     <asp:ContentPlaceHolder id="head" runat="server" />
+    <style>
+        img.menu {
+            width:100px;
+            height:50px
+        }
+        .auto-style1 {
+            height: 34px;
+        }
+    </style>
 </head>
 <body>
     <table width ="90%" border =" 1" height="600px">
         <tr> 
             <td colspan ="2" align="center" height="40px"> 
-                <h1>Welcome to Jonathan Elkind's Website!</h1>
+                <h1>אתר האוהדים של ברצלונה בישראל</h1>
             </td>
         </tr>
+        <tr>
+            <td class="auto-style1">
+                <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server" />
+            </td>
+        </tr>
+       
         <tr>
             <td width="80%"> </td>
             <td>
               ניווט   <br />
-                <a href="Home Page.aspx">דף הבית</a><br />
+                <a href="Form.aspx">Form.aspx</a><br />
+                <a href="register.aspx">
+                    <img class="menu" src="Images/register.png" /></a><br />
+                <a href="login.aspx">
+                    <img class="menu" src="Images/login.png" /></a><br />
+                <a href="Home Page.aspx">
+                    <img class="menu" src="Images/home%20page.png" /></a><br />
+                <a href="History.aspx">
+                    <img class="menu" src="Images/history.png" /></a>
                 </td>
+        </tr>
+        <tr>
+            <td>
+                 
+            </td>
         </tr>
          </table>
      
