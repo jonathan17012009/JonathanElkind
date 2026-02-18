@@ -13,20 +13,26 @@ namespace JonathanElkindWebSite
                 string email = Request.Form["email"];
                 string password = Request.Form["password"];
                 string checkbox = Request.Form["checkbox"];
-                string sqlSelect =
-                    "SELECT * FROM tUsers " +
-                    "WHERE Email = N'" + email + "' " +
-                    "AND UserPassword = N'" + password + "'";
-
-                bool userExists = MyAdoHelper.IsExist(sqlSelect);
-
-                if (!userExists)
-                    stResult = "אימייל או סיסמה שגויים";
+                if (email == "JonathanMenahel@gmail.com" && password == "menahel12345")
+                {
+                    Response.Redirect("showMembers.aspx");
+                }
                 else
-                    stResult = "משתמש רשום";
+                {
+                    string sqlSelect =
+                        "SELECT * FROM tUsers " +
+                        "WHERE Email = N'" + email + "' " +
+                        "AND UserPassword = N'" + password + "'";
 
+                    bool userExists = MyAdoHelper.IsExist(sqlSelect);
+
+
+                    if (!userExists)
+                        stResult = "אימייל או סיסמה שגויים";
+                    else
+                        stResult = "משתמש רשום";
+                }
             }
         }
     }
-}
 }
