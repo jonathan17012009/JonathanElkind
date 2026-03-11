@@ -19,19 +19,20 @@ public partial class Signup : System.Web.UI.Page
             string checkbox = Request.Form["checkbox"];
 
 
+            // בדיקה אם האימייל קיים
+            string sqlCheck =
+                "SELECT * FROM tUsers WHERE Email = N'" + email + "'";
 
-            /*
-            //האם המשתמש קיים?
-            //לפי אימייל
-            //אם לא קיים
-            //עושים ISERTR
-            //ובמקום לכתוב נרשמת בהצלחה
-            //Response.Redirect("login.aspx");
-            //אם קיים
-            //stResult="המשתמש קיים"
-            */
+            bool exists = MyAdoHelper.IsExist(sqlCheck);
 
-            string sqlInsert =
+            if (exists)
+            {
+                stResult = "מייל שהוכנס קיים במערכת, הכנס אימייל חדש";
+            }
+            else
+            {
+
+                string sqlInsert =
                     "INSERT INTO tUsers " +
                     "VALUES (" +
                     "N'" + fullName + "'," +     // <--- N לפני המחרוזת
@@ -40,9 +41,11 @@ public partial class Signup : System.Web.UI.Page
                     "N'" + checkbox + "'" +
                     ")";
 
-            MyAdoHelper.DoQuery("MyDB.mdf", sqlInsert);
+                MyAdoHelper.DoQuery("MyDB.mdf", sqlInsert);
 
-            stResult = "נרשמת בהצלחה!";
+                stResult = "נרשמת בהצלחה!";
+            }
+            Response.Redirect("Default.aspx");
         }
     }
 }
