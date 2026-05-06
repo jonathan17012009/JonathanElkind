@@ -2,54 +2,111 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head runat="server">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wolt Clone</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: #f7f7f7; color: #202125; display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; }
-        header { background: white; border-bottom: 1px solid #e0e0e0; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 28px; font-weight: 900; color: #009de0; }
-        nav ul { display: flex; gap: 20px; list-style: none; }
-        nav a { font-weight: 600; padding: 8px 16px; border-radius: 8px; transition: 0.2s; }
-        nav a:hover { background-color: #ebf7fc; color: #009de0; }
-        .btn-primary { background-color: #009de0; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; }
-        main { flex: 1; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .hero { background: #009de0; border-radius: 16px; padding: 60px; text-align: center; color: white; margin-bottom: 40px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: 0.2s; display: block; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 180px; object-fit: cover; }
-        .card-content { padding: 15px; }
-        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
-        .order-summary { background: white; padding: 30px; border-radius: 16px; max-width: 600px; margin: 0 auto; }
-        .order-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
-        footer { text-align: center; padding: 20px; color: #888; margin-top: auto; }
+        /* הגדרות בסיסיות לכל העמוד */
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+            direction: rtl; /* חשוב כדי שהעברית תסתדר מימין לשמאל */
+        }
+
+        /* הפס הלבן למעלה שמכיל את התפריט */
+        #top-bar {
+            background-color: white;
+            border-bottom: 1px solid #cccccc;
+            height: 60px; /* גובה קבוע נחשב יותר בסיסי */
+            padding: 15px;
+        }
+
+        /* הלוגו של וולט - דוחפים אותו ימינה בעזרת float */
+        #logo {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        /* הקישור של הלוגו */
+        #logo a {
+            text-decoration: none;
+            color: #009de0;
+        }
+
+        /* התפריט עם הקישורים - דוחפים אותו שמאלה */
+        #menu {
+            float: left;
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        /* עיצוב הקישורים הרגילים בתפריט */
+        #menu a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            margin-right: 15px;
+            padding: 5px;
+        }
+
+        /* עיצוב פשוט לכפתור ההרשמה שייראה קצת שונה */
+        .blue-button {
+            background-color: #009de0;
+            color: white !important; /* מבטיח שהטקסט יישאר לבן */
+            padding: 10px;
+            border-radius: 5px; /* עיגול עדין של הפינות */
+        }
+
+        /* קוביה שעוטפת את כל התוכן של האתר כדי שלא יימרח על כל המסך */
+        #main-content {
+            width: 900px; /* רוחב קבוע למסך במקום עיצוב רספונסיבי מורכב */
+            margin: 0 auto; /* השיטה הכי מוכרת למרכז div באמצע המסך */
+            padding-top: 30px;
+            min-height: 500px; /* מוודא שהאתר לא יהיה קצר מדי */
+        }
+
+        /* אזור זכויות היוצרים למטה */
+        #footer {
+            text-align: center;
+            color: gray;
+            margin-top: 50px;
+            padding: 20px;
+            clear: both; /* מנקה את ה-float של התפריט כדי שלא יהיו באגים למטה */
+        }
     </style>
+    
+    <%-- אזור להכנסת דברים נוספים מהדפים האחרים (אל תיגע בזה) --%>
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
 </head>
 <body>
-        <header>
-            <div class="logo"><a href="Default.aspx">Wolt</a></div>
-            <nav>
-                <ul>
-                    <li><a href="Default.aspx">דף הבית</a></li>
-                    <li><a href="Restaurants.aspx">מסעדות</a></li>
-                    <li><a href="Login.aspx">התחברות</a></li>
-                    <li><a href="Signup.aspx" class="btn-primary">הרשמה</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
-        </main>
-        <footer>
-            <p>© 2026 Wolt Clone ASP.NET</p>
-        </footer>
+    
+    <!-- הפס העליון -->
+    <div id="top-bar">
+        <!-- אזור הלוגו -->
+        <div id="logo">
+            <a href="Default.aspx">Wolt</a>
+        </div>
+        
+        <!-- אזור הקישורים -->
+        <div id="menu">
+            <a href="Default.aspx">דף הבית</a>
+            <a href="Restaurants.aspx">מסעדות</a>
+            <a href="Login.aspx">התחברות</a>
+            <a href="Signup.aspx" class="blue-button">הרשמה</a>
+        </div>
+    </div>
+
+    <!-- כאן נטען התוכן המשתנה של שאר הדפים -->
+    <div id="main-content">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+    </div>
+
+    <!-- הפס התחתון של זכויות היוצרים -->
+    <div id="footer">
+        <p>© 2026 Wolt Clone ASP.NET</p>
+    </div>
 
 </body>
 </html>
