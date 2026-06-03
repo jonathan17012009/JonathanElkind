@@ -2,11 +2,11 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     
-    <!-- זה קוד ה-JavaScript שהמורה שלחה, מותאם בדיוק לפרויקט שלך -->
     <script language="javascript">
         function checkAll() {
             // מנקה את השגיאות הקודמות
             document.getElementById("fnErr").innerHTML = "";
+            document.getElementById("emailErr").innerHTML = ""; // מנקה את שגיאת האימייל
             document.getElementById("passErr").innerHTML = "";
 
             var f = true;
@@ -15,7 +15,11 @@
             if (checkFullName() == false)
                 f = false;
 
-            // בודק את הסיסמה (במקום ה-XXXXX שהמורה כתבה)
+            // בודק את האימייל (חדש!)
+            if (checkEmail() == false)
+                f = false;
+
+            // בודק את הסיסמה 
             if (checkPassword() == false)
                 f = false;
 
@@ -26,8 +30,28 @@
         function checkFullName() {
             var name = document.getElementById("fullName").value;
 
+            // בדיקת אורך השם
             if (name.length < 2 || name.length > 30) {
                 document.getElementById("fnErr").innerHTML = "אורך השם לא תקין";
+                return false;
+            }
+
+            // בדיקה האם השם מכיל מספרים (חדש!)
+            if (/\d/.test(name)) {
+                document.getElementById("fnErr").innerHTML = "שם מלא לא יכול להכיל מספרים";
+                return false;
+            }
+
+            return true;
+        }
+
+        // פעולה שבודקת אם האימייל תקין (חדש!)
+        function checkEmail() {
+            var email = document.getElementById("email").value;
+
+            // בדיקה האם קיים שטרודל באותיות
+            if (email.indexOf('@') == -1) {
+                document.getElementById("emailErr").innerHTML = "אימייל לא תקין (חייב להכיל @)";
                 return false;
             }
             return true;
@@ -48,7 +72,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     
-    <!-- טופס ההרשמה שעשינו, מעוצב פשוט וברור -->
     <div style="background-color: white; width: 450px; padding: 20px; border: 1px solid black; margin: 0 auto; text-align: right;">
         <h2>הרשמה לאתר</h2>
         <br>
@@ -62,7 +85,6 @@
                     <td>
                         <input type="text" name="fullName" id="fullName" />
                     </td>
-                    <!-- המקום שבו תופיע השגיאה של השם -->
                     <td id="fnErr" style="color: red; font-size: 14px; font-weight: bold; padding-right: 10px;"></td>
                 </tr>
                 
@@ -71,7 +93,7 @@
                     <td>
                         <input type="text" name="email" id="email" />
                     </td>
-                    <td></td>
+                    <td id="emailErr" style="color: red; font-size: 14px; font-weight: bold; padding-right: 10px;"></td>
                 </tr>
                 
                 <tr>
@@ -79,7 +101,6 @@
                     <td>
                         <input type="password" name="password" id="password" />
                     </td>
-                    <!-- המקום שבו תופיע השגיאה של הסיסמה -->
                     <td id="passErr" style="color: red; font-size: 14px; font-weight: bold; padding-right: 10px;"></td>
                 </tr>
 
@@ -107,7 +128,6 @@
 
         </form>
         
-        <!-- הודעות מהשרת (כמו "האימייל כבר קיים" או "נרשמת בהצלחה") -->
         <div style="text-align: center; color: red; font-weight: bold; margin-top: 15px;">
             <%= stResult %>
         </div>
