@@ -1,111 +1,123 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="System.Web.UI.MasterPage" %>
+﻿<%-- שורה ראשונה נקייה לחלוטין - בלי CodeFile ובלי Inherits! --%>
+<%@ Master Language="C#" %>
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head runat="server">
-    <title>Wolt Clone</title>
+    
+    <title>אתר משלוחים</title>
+    
     <style>
-        /* הגדרות בסיסיות לכל העמוד */
-        body {
-            background-color: #f7f7f7;
-            font-family: Arial;
-            margin: 0;
-            padding: 0;
-            direction: rtl; /* חשוב כדי שהעברית תסתדר מימין לשמאל */
+        /* עיצוב הרקע של כל המסך */
+        body { 
+            background-color: #e6e6e6; 
+            font-family: Arial; 
+            margin: 0; 
+            padding: 0; 
+            direction: rtl; 
         }
-
-        /* הפס הלבן למעלה שמכיל את התפריט */
-        #top-bar {
-            background-color: white;
-            border-bottom: 1px solid #cccccc;
-            height: 60px; /* גובה קבוע נחשב יותר בסיסי */
-            padding: 15px;
+        
+        /* עיצוב הפס העליון */
+        #top-bar { 
+            background-color: white; 
+            height: 60px; 
+            padding: 15px; 
+            border-bottom: 2px solid black; 
         }
-
-        /* הלוגו של וולט - דוחפים אותו ימינה בעזרת float */
-        #logo {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            margin-right: 20px;
+        
+        /* עיצוב הלוגו */
+        #logo { 
+            float: right; 
+            font-size: 30px; 
+            font-weight: bold; 
+            margin-right: 20px; 
         }
-
-        /* הקישור של הלוגו */
-        #logo a {
-            text-decoration: none;
-            color: #009de0;
+        
+        /* עיצוב הקישור של הלוגו */
+        #logo a { 
+            text-decoration: none; 
+            color: black; 
         }
-
-        /* התפריט עם הקישורים - דוחפים אותו שמאלה */
-        #menu {
-            float: left;
-            margin-left: 20px;
-            margin-top: 5px;
+        
+        /* עיצוב התפריט */
+        #menu { 
+            float: left; 
+            margin-top: 10px; 
         }
-
-        /* עיצוב הקישורים הרגילים בתפריט */
-        #menu a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            margin-right: 15px;
-            padding: 5px;
+        
+        /* עיצוב הקישורים בתפריט */
+        #menu a { 
+            text-decoration: none; 
+            color: blue; 
+            margin-right: 15px; 
+            font-size: 18px; 
         }
-
-        /* עיצוב פשוט לכפתור ההרשמה שייראה קצת שונה */
-        .blue-button {
-            background-color: #009de0;
-            color: white !important; /* מבטיח שהטקסט יישאר לבן */
-            padding: 10px;
-            border-radius: 5px; /* עיגול עדין של הפינות */
-        }
-
-        /* קוביה שעוטפת את כל התוכן של האתר כדי שלא יימרח על כל המסך */
-        #main-content {
-            width: 900px; /* רוחב קבוע למסך במקום עיצוב רספונסיבי מורכב */
-            margin: 0 auto; /* השיטה הכי מוכרת למרכז div באמצע המסך */
-            padding-top: 30px;
-            min-height: 500px; /* מוודא שהאתר לא יהיה קצר מדי */
-        }
-
-        /* אזור זכויות היוצרים למטה */
-        #footer {
-            text-align: center;
-            color: gray;
-            margin-top: 50px;
-            padding: 20px;
-            clear: both; /* מנקה את ה-float של התפריט כדי שלא יהיו באגים למטה */
+        
+        /* עיצוב הקופסה האמצעית איפה שרואים את שאר האתר */
+        #main-content { 
+            width: 800px; 
+            margin: 0 auto; 
+            margin-top: 30px; 
+            background-color: white; 
+            min-height: 400px; 
+            padding: 20px; 
+            border: 1px solid black; 
         }
     </style>
     
-    <%-- אזור להכנסת דברים נוספים מהדפים האחרים (אל תיגע בזה) --%>
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    
 </head>
 <body>
     
-    <!-- הפס העליון -->
     <div id="top-bar">
-        <!-- אזור הלוגו -->
+        
         <div id="logo">
-            <a href="Default.aspx">Wolt</a>
+            <a href="Default.aspx">Wolt Clone</a> 
         </div>
         
-        <!-- אזור הקישורים -->
         <div id="menu">
-            <a href="Default.aspx">דף הבית</a>
-            <a href="Restaurants.aspx">מסעדות</a>
-            <a href="Login.aspx">התחברות</a>
-            <a href="Signup.aspx" class="blue-button">הרשמה</a>
+            <a href="Default.aspx">דף הבית</a> 
+            <a href="Restaurants.aspx">מסעדות</a> 
+            <a href="Gallery.aspx">גלריה</a> 
+            <a href="About.aspx">אודות</a> 
+            
+            <%-- בודק אם אין אף אחד שמחובר לאתר --%>
+            <% if (Session["user"] == null && Session["nihol"] == null) { %>
+                
+                <a href="login.aspx">התחברות</a> 
+                <a href="Signup.aspx">הרשמה</a> 
+                
+            <% } else { %>
+                
+                <a href="Order.aspx">הזמנה</a> 
+                <a href="Logout.aspx">התנתק</a> 
+                
+            <% } %>
+            
+            <%-- בודק אם מי שמחובר הוא מנהל --%>
+            <% if (Session["nihol"] != null) { %>
+                
+                <a href="showMembers.aspx" style="color: red;">ניהול</a> 
+                
+            <% } %>
         </div>
+        
+        <%-- בודק אם יש שם שמור בזיכרון --%>
+        <% if (Session["name"] != null) { %>
+            
+            <div style="float: left; margin-left: 20px; color: green; font-weight: bold; margin-top: 10px;">
+                שלום, <%= Session["name"] %>! 
+            </div>
+            
+        <% } %>
+        
     </div>
 
-    <!-- כאן נטען התוכן המשתנה של שאר הדפים -->
     <div id="main-content">
+        
         <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
-    </div>
-
-    <!-- הפס התחתון של זכויות היוצרים -->
-    <div id="footer">
-        <p>© 2026 Wolt Clone ASP.NET</p>
+        
     </div>
 
 </body>

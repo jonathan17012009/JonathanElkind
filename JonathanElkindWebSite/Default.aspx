@@ -1,42 +1,26 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" Inherits="System.Web.UI.Page" %>
+﻿<%-- השורה הזו מחברת את דף הבית למאסטר החדש שלנו, בלי שום תוספות מיותרות --%>
+<%@ Page Title="דף הבית" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Default" %>
 
-<%-- פה אנחנו מגדירים שהתוכן שלנו ייכנס לתוך תבנית העיצוב הכללית של האתר (ה-Master Page) --%>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+<%-- מקום ריק שמור לקודים בראש הדף --%>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server"></asp:Content>
+
+<%-- התוכן המרכזי של דף הבית --%>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     
-    <!-- אזור הכותרת הראשית של העמוד -->
-    <div class="main-title-area">
+    <%-- קופסה שממרכזת את הטקסט לאמצע --%>
+    <div style="text-align: center; margin-top: 50px;">
         
-        <!-- כותרת גדולה -->
-        <h1>רעבים? הזמינו עכשיו</h1>
+        <%-- כותרת ענקית בצבע כחול --%>
+        <h1 style="color: #009de0; font-size: 50px;">רעבים? הזמינו עכשיו!</h1>
         
-        <!-- טקסט רגיל מתחת לכותרת -->
-        <p>המסעדות הכי שוות בעיר, במשלוח מהיר עד הדלת.</p>
+        <%-- פסקת הסבר קטנה מתחת לכותרת --%>
+        <p style="font-size: 20px;">המסעדות הכי שוות בעיר, במשלוח מהיר עד הדלת.</p>
         
-        <!-- ירידת שורה כדי לעשות קצת רווח -->
-        <br>
+        <%-- יורד שתי שורות למטה בשביל הרווח --%>
+        <br><br>
         
-        <!-- קישור שמוביל לדף המסעדות ומעוצב כמו כפתור -->
-        <a href="Restaurants.aspx" class="button-start">בואו נתחיל</a>
-        
-    </div>
-
-    <!-- אזור שמכיל את קוביות סוגי האוכל (קטגוריות) -->
-    <div class="categories-area">
-        
-        <!-- קוביה ראשונה: המבורגר -->
-        <div class="food-box">
-            <div class="box-text">🍔 המבורגר</div>
-        </div>
-        
-        <!-- קוביה שניה: פיצה -->
-        <div class="food-box">
-            <div class="box-text">🍕 פיצה</div>
-        </div>
-        
-        <!-- קוביה שלישית: סושי -->
-        <div class="food-box">
-            <div class="box-text">🍣 סושי</div>
-        </div>
+        <%-- כפתור שלוקח את המשתמש לדף המסעדות --%>
+        <a href="Restaurants.aspx" class="blue-button" style="text-decoration: none; border-radius: 5px;">לצפייה במסעדות</a>
         
     </div>
 

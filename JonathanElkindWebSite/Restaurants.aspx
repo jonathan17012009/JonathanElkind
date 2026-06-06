@@ -1,45 +1,33 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" Inherits="System.Web.UI.Page" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    
-    <!-- כותרת העמוד עם קצת רווח למטה כדי שלא יידבק לתמונות -->
-    <h2 style="margin-bottom: 25px;">מסעדות מומלצות</h2>
-    
-    <!-- אזור שמסדר את כל המסעדות אחת ליד השניה כמו רשת -->
-    <div class="grid">
-        
-        <!-- מסעדה 1: ויטרינה (המבורגר) -->
-        <!-- השתמשנו בתגית a כדי שכל הקוביה תהיה בעצם כפתור שלוחץ לדף ההזמנה -->
-        <a href="Order.aspx" class="card">
-            <!-- תמונה אמיתית של המבורגר -->
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80" alt="המבורגר" />
-            
-            <div class="card-content">
-                <strong>ויטרינה</strong><br>
-                20-30 דק'
-            </div>
-        </a>
-        
-        <!-- מסעדה 2: טוני וספה (פיצה) -->
-        <a href="Order.aspx" class="card">
-            <!-- תמונה אמיתית של פיצה -->
-            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80" alt="פיצה" />
-            
-            <div class="card-content">
-                <strong>טוני וספה</strong><br>
-                30-40 דק'
-            </div>
-        </a>
+﻿<%-- חיבור הדף למאסטר --%>
+<%@ Page Title="מסעדות" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Restaurants.aspx.cs" Inherits="Restaurants" %>
 
-        <!-- מסעדה 3: סושי (הוספתי את מה שהיה חסר) -->
-        <a href="Order.aspx" class="card">
-            <!-- תמונה אמיתית של סושי -->
-            <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80" alt="סושי" />
-            
-            <div class="card-content">
-                <strong>ג'פניקה</strong><br> <!-- סתם דוגמה לשם של מסעדה -->
-                25-35 דק'
-            </div>
-        </a>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server"></asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    
+    <%-- כותרת הדף --%>
+    <h2 style="text-align: center;">מסעדות מומלצות</h2>
+    <br>
+
+    <%-- אזור שממרכז את המסעדות שנוסיף --%>
+    <div style="text-align: center;">
         
+        <%-- קופסה שמייצגת מסעדה אחת (המבורגר) --%>
+        <div style="display: inline-block; width: 200px; border: 1px solid gray; padding: 10px; margin: 10px; background-color: white;">
+            <%-- התמונה של המסעדה --%>
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" style="width: 100%; height: 120px;" alt="המבורגר" />
+            <%-- השם של המסעדה --%>
+            <h3>ויטרינה</h3>
+            <%-- כפתור הזמנה שלוקח לדף ההזמנות --%>
+            <a href="Order.aspx" class="blue-button" style="text-decoration: none; padding: 5px 10px;">הזמן עכשיו</a>
+        </div>
+
+        <%-- קופסה שמייצגת מסעדה שנייה (פיצה) --%>
+        <div style="display: inline-block; width: 200px; border: 1px solid gray; padding: 10px; margin: 10px; background-color: white;">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300" style="width: 100%; height: 120px;" alt="פיצה" />
+            <h3>טוני וספה</h3>
+            <a href="Order.aspx" class="blue-button" style="text-decoration: none; padding: 5px 10px;">הזמן עכשיו</a>
+        </div>
+
     </div>
 </asp:Content>

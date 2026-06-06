@@ -1,63 +1,39 @@
 ﻿using System;
-using System.Data;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Signup : System.Web.UI.Page
 {
-    // משתנה ששומר את הודעת השגיאה שתודפס על המסך
     public string stResult = "";
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        // בודקים אם הגענו לדף אחרי שלחצו על כפתור (הטופס נשלח)
-        if (Page.IsPostBack == true)
+        if (Page.IsPostBack == true) // אם שלחו את הטופס
         {
-            // קולטים את הנתונים מהטופס שב-HTML
-            // השמות בסוגריים המרובעים חייבים להיות תואמים ל-name ב-HTML
             string fullName = Request.Form["fullName"];
             string email = Request.Form["email"];
             string password = Request.Form["password"];
-            string terms = Request.Form["terms"]; // תיקנתי ל-terms
+            string terms = Request.Form["terms"];
 
-            // בדיקת תקינות בסיסית: מוודאים שלא השאירו שדות ריקים
-            if (fullName == "" || email == "" || password == "")
+            if (fullName == "" || email == "" || password == "" || terms == null) // בודק שלא רימו את הדפדפן ושחכו שדות
             {
-                stResult = "חובה למלא את כל השדות!";
-            }
-            else if (terms == null) // אם לא סימנו וי בצ'קבוקס, הערך שלו נהיה ריק
-            {
-                stResult = "חובה להסכים לתנאי השימוש!";
+                stResult = "נא למלא את כל השדות ולאשר תנאים.";
             }
             else
             {
-                // משפט SQL שבודק אם האימייל כבר קיים בטבלה
+                // מחפש במסד הנתונים אם האימייל תפוס
                 string sqlCheck = "SELECT * FROM tUsers WHERE Gmail = '" + email + "'";
-
-                // מפעילים פונקציה שבודקת אם יש תוצאה במסד הנתונים (מחזירה אמת או שקר)
-                bool exists = MyAdoHelper.IsExist(sqlCheck);
-
-                // אם האימייל כבר קיים
-                if (exists == true)
+                if (MyAdoHelper.IsExist(sqlCheck)) // מפעיל את הפונקציה מהקובץ MyAdoHelper
                 {
-                    stResult = "האימייל הזה כבר קיים במערכת, אנא הכנס אימייל אחר.";
+                    stResult = "האימייל כבר קיים במערכת."; // מודיע שגיאה
                 }
-                else
+                else // אם האימייל פנוי
                 {
-                    // אם הכל תקין, בונים משפט SQL שמוסיף את המשתמש
-                    // האות N מחוץ למרכאות עוזרת למסד הנתונים לקרוא עברית בלי ג'יבריש
+                    // מכין פקודה שתוסיף את המשתמש למסד
                     string sqlInsert = "INSERT INTO tUsers VALUES (N'" + fullName + "', N'" + email + "', N'" + password + "', N'" + terms + "')";
+                    MyAdoHelper.DoQuery("MyDB.mdf", sqlInsert); // מפעיל את הפקודה ומכניס את המשתמש
 
-                    // מפעילים את פקודת ההכנסה לתוך מסד הנתונים
-                    MyAdoHelper.DoQuery("MyDB.mdf", sqlInsert);
-
-                    // שומרים את המשתמש בזיכרון (סשן) כדי שייחשב מחובר מיד אחרי ההרשמה
-                    Session["user"] = "ok";
-                    Session["name"] = fullName;
-
-                    // עכשיו, רק אחרי שבאמת הצלחנו להירשם, נעביר אותו לדף הבית!
-                    Response.Redirect("Default.aspx");
+                    Session["user"] = "ok"; // מחבר את המשתמש אוטומטית
+                    Session["name"] = fullName; // שומר את שמו
+                    Response.Redirect("Default.aspx"); // זורק אותו לדף הבית
                 }
             }
         }

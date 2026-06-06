@@ -1,58 +1,38 @@
-﻿using System;
-using System.Data;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-// מחקתי את שאר הספריות המיותרות כדי שהקוד ייראה בסיסי ונקי
+﻿using System; // קוד בסיסי של המחשב
+using System.Data; // קוד לעבודה עם טבלאות נתונים
 
-public partial class login : System.Web.UI.Page
+public partial class login : System.Web.UI.Page // המחלקה של דף ההתחברות (בלי Namespace)
 {
-    // משתנה גלובלי שישמור את הודעת השגיאה למשתמש
-    public string stResult = "";
+    public string stResult = ""; // משתנה שישמור את הודעת השגיאה
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected void Page_Load(object sender, EventArgs e) // פעולה שרצה כשהדף עולה
     {
-        // בודקים האם הגענו לדף אחרי שלחצו על כפתור (הטופס נשלח)
-        if (Page.IsPostBack == true)
+        if (Page.IsPostBack == true) // בודק אם לחצו על כפתור 'הכנס'
         {
-            // התיקון של הבאג: עכשיו אנחנו מושכים את הנתונים לפי השמות המעודכנים ששמנו ב-HTML
-            string email = Request.Form["email"];
-            string password = Request.Form["password"];
+            string email = Request.Form["email"]; // לוקח את האימייל שהוקלד
+            string password = Request.Form["password"]; // לוקח את הסיסמה שהוקלדה
 
-            // בודקים אם מי שניסה להתחבר זה המנהל
-            if (email == "JonathanMenahel@gmail.com" && password == "menahel12345")
+            if (email == "Admin@gmail.com" && password == "admin123") // בדיקה אם זה המנהל
             {
-                // שומרים בסשן (זיכרון השרת) שזה המנהל כדי שנוכל להשתמש בזה בדפים אחרים
-                Session["nihol"] = "ok";
-                Session["name"] = "יהונתן מנהל";
-
-                // בגלל שתיקנתי את השמות למעלה, עכשיו הקוד ייכנס לכאן ויעביר אותך לדף המנהלים
-                Response.Redirect("showMembers.aspx");
+                Session["nihol"] = "ok"; // שומר בזיכרון שזה מנהל
+                Session["name"] = "מנהל מערכת"; // שומר את השם
+                Response.Redirect("showMembers.aspx"); // מעביר לדף ניהול
             }
-            else
+            else // אם זה לא המנהל, נבדוק אם זה משתמש רגיל במסד הנתונים
             {
-                // אם זה לא המנהל, נחפש את המשתמש במסד הנתונים
-                // משפט SQL פשוט שמחפש משתמש עם האימייל והסיסמה שהוזנו
+                // מחפש במסד הנתונים את האימייל והסיסמה האלה
                 string sqlSelect = "SELECT * FROM tUsers WHERE Gmail = '" + email + "' AND Password = '" + password + "'";
+                DataTable dt = MyAdoHelper.ExecuteDataTable(sqlSelect); // מפעיל את החיפוש ומכניס לטבלה
 
-                // מפעילים את הפקודה בעזרת מחלקת העזר ומכניסים את התוצאה לטבלה
-                DataTable dt = MyAdoHelper.ExecuteDataTable(sqlSelect);
-
-                // בודקים אם הטבלה חזרה ריקה (כלומר אין משתמש כזה)
-                if (dt.Rows.Count == 0)
+                if (dt.Rows.Count == 0) // אם הטבלה ריקה, סימן שהפרטים שגויים
                 {
-                    // במקום לכתוב סתם "אין נתונים", עדיף לכתוב הודעה ברורה
                     stResult = "שם משתמש או סיסמה שגויים";
                 }
-                else
+                else // אם נמצא משתמש
                 {
-                    // אם כן מצאנו את המשתמש במסד הנתונים
-                    Session["user"] = "ok";
-                    // לוקחים את השם הפרטי שלו (fn) מהשורה הראשונה בטבלה שחזרה
-                    Session["name"] = dt.Rows[0]["fn"];
-
-                    // מעבירים אותו לדף הבית של האתר
-                    Response.Redirect("Default.aspx");
+                    Session["user"] = "ok"; // שומר בזיכרון שזה משתמש רגיל מחובר
+                    Session["name"] = dt.Rows[0]["FullName"].ToString(); // לוקח את השם שלו ממסד הנתונים
+                    Response.Redirect("Default.aspx"); // מעביר אותו לדף הבית
                 }
             }
         }

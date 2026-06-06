@@ -1,160 +1,49 @@
-﻿using System;
-using System.Data;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using System.Data.SqlClient;
-
-/// <summary>
-/// Summary description for MyAdoHelper
-/// פעולות עזר לשימוש במסד נתונים  מסוג 
-/// SQL SERVER
-///  App_Data המסד ממוקם בתקיה 
-/// </summary>
+﻿using System; // ייבוא ספריות מערכת בסיסיות
+using System.Data; // ייבוא ספריית ניהול טבלאות נתונים
+using System.Data.SqlClient; // ייבוא ספריית התקשורת עם מסד נתונים SQL
+using System.Web; // ייבוא ספריית האינטרנט של ASP.NET
 
 public class MyAdoHelper
 {
-    private const String dbFileName = "~/app_data/MyDB.mdf"; //<ENTER YOUR DATABASE (.mdf) FILE NAME HERE>";
-    
-
-    public MyAdoHelper()
+    // פונקציה שיוצרת את החיבור למסד הנתונים
+    public static SqlConnection ConnectToDb(string fileName)
     {
-        //
-        // TODO: Add constructor logic here
-        //
+        string path = HttpContext.Current.Server.MapPath("App_Data/") + fileName; // מוצאת את הכתובת הפיזית של קובץ ה-MDF
+        string connString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path + ";Integrated Security=True"; // בונה את מחרוזת החיבור
+        SqlConnection conn = new SqlConnection(connString); // יוצרת אובייקט חיבור
+        return conn; // מחזירה את החיבור המוכן
     }
 
-    /// <summary>
-    /// הפעולה מקבל נתיב לקובץ בסיס הנתונים ויוצרת קשר אל בסיס הנתונים
-    /// </summary>
-    /// <returns>קישור אל בסיס הנתונים</returns>
-    public static SqlConnection ConnectToDb()
-    {
-        string path = HttpContext.Current.Server.MapPath(dbFileName);//מיקום מסד בפורוייקט
-        string connStr = string.Format(@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={0}; Integrated Security = True", path);
-        //string connString = string.Format(@"server=(LocalDB)\v11.0;AttachDbFilename={0};Integrated Security=True", path);
-
-        //        string connString = @"Data Source=.\SQLEXPRESS;AttachDbFilename=" +
-        //                             path +
-        //                             ";Integrated Security=True;User Instance=True";
-        SqlConnection conn = new SqlConnection(connStr);
-        return conn;
-    }
-
-    /// <summary>
-    /// To Execute update / insert / delete queries
-    ///  הפעולה מקבלת משפט לביצוע ומבצעת את הפעולה על המסד
-    /// </summary>
-    /// <param name="sql">שאילת לביצוע כמחרוזת מחיקה/ הוספה/ עדכון</param>
+    // פונקציה לביצוע פקודות SQL (הוספה/עדכון)
     public static void DoQuery(string fileName, string sql)
     {
-        SqlConnection conn = ConnectToDb();
-        conn.Open();
-        SqlCommand com = new SqlCommand(sql, conn);
-        com.ExecuteNonQuery();
-        com.Dispose();
-        conn.Close();
+        SqlConnection conn = ConnectToDb(fileName); // פותחת חיבור
+        conn.Open(); // פותחת את הערוץ למסד
+        SqlCommand com = new SqlCommand(sql, conn); // מכינה את פקודת ה-SQL
+        com.ExecuteNonQuery(); // מריצה את הפקודה
+        conn.Close(); // סוגרת את החיבור
     }
 
-    /// <summary>
-    /// To Execute update / insert / delete queries
-    ///  הפעולה מקבלת משפט לביצוע ומחזירה את מספר השורות שהושפעו מביצוע הפעולה
-    /// </summary>
-    /// <param name="sql">שאילת לביצוע כמחרוזת מחיקה/ הוספה/ עדכון</param>
-    /// <returns>מספר השורות שהושפעו מביצוע הפעולה</returns>
-    public static int RowsAffected(string sql)
-    {
-
-        SqlConnection conn = ConnectToDb();
-        conn.Open();
-        SqlCommand com = new SqlCommand(sql, conn);
-        int rowsA = com.ExecuteNonQuery();
-        conn.Close();
-        return rowsA;
-    }
-
-    /// <summary>
-    /// הפעולה מקבלת משפט לחיפוש ערך - מחזירה אמת אם הערך נמצא ושקר אחרת
-    /// </summary>
-    /// <param name="sql">שאילתת אחזור לביצוע כמחרוזת</param>
-    /// <returns>אמת אם הנתונים קיימים ושקר אחרת</returns>
+    // פונקציה שבודקת האם ערך מסוים כבר קיים (למשל בהרשמה)
     public static bool IsExist(string sql)
     {
-
-        SqlConnection conn = ConnectToDb();
-        conn.Open();
-        SqlCommand com = new SqlCommand(sql, conn);
-        SqlDataReader data = com.ExecuteReader();
-        bool found;
-        found = (bool)data.Read();// אם יש נתונים לקריאה יושם אמת אחרת שקר - הערך קיים במסד הנתונים
-        conn.Close();
-        return found;
-
+        SqlConnection conn = ConnectToDb("MyDB.mdf"); // מתחברת למסד
+        conn.Open(); // פותחת ערוץ
+        SqlCommand com = new SqlCommand(sql, conn); // מכינה שאילתה
+        SqlDataReader data = com.ExecuteReader(); // קוראת נתונים
+        bool found = data.HasRows; // בודקת אם חזרו שורות מהשאילתה
+        conn.Close(); // סוגרת ערוץ
+        return found; // מחזירה אמת או שקר
     }
 
-    /// <summary>
-    /// הפעולה מקבלת משפט לחיפוש ערך - מחזירה אובייקט המכיל טבלה של התוצאות
-    /// </summary>
-    /// <param name="sql">שאילתת אחזור לביצוע כמחרוזת</param>
-    /// <returns>אובייקט טבלה המכיל את תוצאות החיפוש</returns>
+    // פונקציה לשליפת טבלה של נתונים (למשל להצגת המשתמשים למנהל)
     public static DataTable ExecuteDataTable(string sql)
     {
-        SqlConnection conn = ConnectToDb();
-        conn.Open();
-        SqlDataAdapter tableAdapter = new SqlDataAdapter(sql, conn);
-        DataTable dt = new DataTable();
-        tableAdapter.Fill(dt);
-        return dt;
+        SqlConnection conn = ConnectToDb("MyDB.mdf"); // מתחברת למסד
+        conn.Open(); // פותחת ערוץ
+        SqlDataAdapter tableAdapter = new SqlDataAdapter(sql, conn); // מגדירה מתאם נתונים
+        DataTable dt = new DataTable(); // יוצרת טבלה ריקה בזיכרון
+        tableAdapter.Fill(dt); // ממלאת את הטבלה בתוצאות
+        return dt; // מחזירה את הטבלה המלאה
     }
-
-    /// <summary>
-    /// הפעולה מקבלת משפט לחיפוש ערך - מחזירה מחרוזת המכילה טבלה בפורמט
-    /// html
-    /// המכילה את נתוני הטבלה מבסיס הנתונים
-    /// </summary>
-    /// <param name="sql">שאילתת אחזור לביצוע כמחרוזת</param>
-    /// <returns>טבלה כמחרוזת להצגה בדפדפן</returns>
-    public static string printDataTable(string fileName,  string sql)
-    {
-        DataTable dt = ExecuteDataTable(sql);
-
-        string printStr = "<table border='1'>";
-
-        foreach (DataRow row in dt.Rows)
-        {        
-            printStr += "<tr>";
-            foreach (object myItemArray in row.ItemArray)
-            {
-                if (myItemArray.GetType().ToString().Equals("System.DateTime"))
-                {
-                    printStr += "<td>" + ((DateTime)myItemArray).ToShortDateString() + "</td>";
-                }
-                else
-                {
-                    printStr += "<td>" + myItemArray.ToString() + "</td>";
-                }
-            }
-            printStr += "</tr>";
-        }
-        printStr += "</table>";
-
-        return printStr + "<br/>";
-    }
-    public static object GetScalar(string sql)
-    {
-        SqlConnection conn = MyAdoHelper.ConnectToDb();
-        conn.Open();
-        SqlCommand comm = new SqlCommand(sql, conn);
-        object tmp = comm.ExecuteScalar();
-        comm.Dispose();
-        conn.Close();
-        return tmp;
-    }
-
 }
