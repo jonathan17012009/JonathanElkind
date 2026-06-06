@@ -19,8 +19,8 @@
                 </td>
                 <td style="vertical-align: top; padding-right: 20px;">
                     <%-- הפרטים של הפרויקט --%>
-                    <p><strong>שם המפתח:</strong> פרויקט סיום</p>
-                    <p><strong>מגמה:</strong> הנדסת תוכנה (מדעי המחשב)</p>
+                    <p><strong>שם המפתח:</strong> יהונתן אלקינד</p>
+                    <p><strong>מגמה:</strong> מדעי המחשב</p>
                     <p><strong>נושא האתר:</strong> מערכת הדמיה להזמנת אוכל ממסעדות, הכוללת רישום משתמשים ופאנל ניהול.</p>
                 </td>
             </tr>
